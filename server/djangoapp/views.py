@@ -15,16 +15,12 @@ import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
 from .populate import initiate
-
+from .restapis import get_request
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
-# Create your views here.
-
-
-# Create a `login_request` view to handle sign in request
 @csrf_exempt
 def login_user(request):
     # Get username and password from request.POST dictionary
@@ -40,17 +36,10 @@ def login_user(request):
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
-
-# Create a `logout_request` view to handle sign out request
 def logout(request):
     data = {"userName": ""}
     return JsonResponse(data)
 
-
-# ...
-
-
-# Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
     context = {}
@@ -90,20 +79,16 @@ def registration(request):
         return JsonResponse(data)
 
 
-# # Update the `get_dealerships` view to render the index page with
-# a list of dealerships
-# def get_dealerships(request):
-# ...
 def get_dealerships(request, state="All"):
     if(state == "All"):
         endpoint = "/fetchDealers"
+        print('all -= ------------- ')
     else:
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
+    # print(endpoint)
     return JsonResponse({"status":200,"dealers":dealerships})
-# Create a `get_dealer_reviews` view to render the reviews of a dealer
-# def get_dealer_reviews(request,dealer_id):
-# ...
+
 def get_dealer_reviews(request, dealer_id):
     # if dealer id has been provided
     if(dealer_id):
@@ -123,6 +108,7 @@ def get_dealer_details(request, dealer_id):
     if(dealer_id):
         endpoint = "/fetchDealer/"+str(dealer_id)
         dealership = get_request(endpoint)
+        
         return JsonResponse({"status":200,"dealer":dealership})
     else:
         return JsonResponse({"status":400,"message":"Bad Request"})

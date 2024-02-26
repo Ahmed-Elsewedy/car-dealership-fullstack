@@ -29,10 +29,10 @@ const Dealer = () => {
       method: "GET"
     });
     const retobj = await res.json();
-    
     if(retobj.status === 200) {
-      let dealerobjs = Array.from(retobj.dealer)
-      setDealer(dealerobjs[0])
+        // let dealerobjs = Array.from(retobj.dealer)
+        // console.log('dealerobjs ============= ', dealerobjs)
+      setDealer(retobj.dealer)
     }
   }
 
